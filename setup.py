@@ -24,7 +24,7 @@ with open(path.join(here, 'requirements.txt'), encoding='utf-8') as f:
     requirements = f.read().splitlines()
 
 setup(
-    name='privatisation',
+    name='case',
     version=version,
     keywords='archive database flask',
     description='Cases for archive',
