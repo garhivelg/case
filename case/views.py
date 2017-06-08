@@ -170,9 +170,9 @@ def edit_case(
 
     if form.validate_on_submit():
         form.populate_obj(case)
-        if form.register:
+        if form.register.data:
             case.register_id = form.register.data.id
-        if form.facility:
+        if form.facility.data:
             case.facility_id = form.facility.data.id
         db.session.add(case)
         if case.id:
