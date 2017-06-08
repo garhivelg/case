@@ -1,0 +1,26 @@
+{
+  "name": "case",
+  "homepage": "https://github.com/garhivelg/case",
+  "authors": [
+    "Dmitry Kutsenko <d2emonium@gmail.com>"
+  ],
+  "description": "Cases database for archive",
+  "main": "manage.py",
+  "keywords": [
+    "archive",
+    "database"
+  ],
+  "license": "GPL-3",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.2.1"
+  }
+}
