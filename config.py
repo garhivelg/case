@@ -9,6 +9,7 @@ BASE_DIR = os.path.abspath(os.getcwd())
 class Config(object):
     DEBUG = False
     TESTING = False
+    SECRET_KEY = "ThereIsNoSpoon"
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///db/cases.db'
     # SQLALCHEMY_DATABASE_URI = 'sqlite://'
