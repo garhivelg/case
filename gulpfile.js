@@ -26,6 +26,11 @@ gulp.task('jquery', function(){
     .pipe(gulp.dest('static/js'))
 });
 
+gulp.task('favicon', function(){
+  return gulp.src('assets/favicon/*')
+    .pipe(gulp.dest('static/favicon'))
+});
+
 gulp.task('html', function(){
   return gulp.src('assets/templates/*.pug')
     .pipe(pug())
@@ -40,4 +45,4 @@ gulp.task('css', function(){
 });
 
 gulp.task('bootstrap', ['bootstrap_css', 'bootstrap_js', 'bootstrap_fonts']);
-gulp.task('default', ['html', 'css', 'jquery', 'bootstrap']);
+gulp.task('default', ['favicon', 'html', 'css', 'jquery', 'bootstrap']);
