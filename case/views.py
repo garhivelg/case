@@ -18,7 +18,6 @@ def list_registers():
         items=[
             [
                 i,
-                # url_for("list_cases", register_id=i.id),
                 url_for("edit_register", register_id=i.id)
             ] for i in items
         ],
@@ -121,10 +120,15 @@ def list_cases(register_id=None, fund_title=None, fund_register=None):
         app.logger.debug(q)
     cases = q.all()
 
-    items = [("Все", url_for("list_records", book=-1)), ] + [
+    items = [
+        (
+            "Все",
+            url_for(app.config.get("VIEW_CASE"), case_id=-1),
+        ),
+    ] + [
         [
             i,
-            url_for("list_records", book=i.id),
+            url_for(app.config.get("VIEW_CASE"), case_id=i.id),
             url_for("edit_case", case_id=i.id),
         ] for i in cases
     ]
