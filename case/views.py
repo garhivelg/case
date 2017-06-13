@@ -14,13 +14,8 @@ def list_registers():
     items = Register.query.all()
 
     return render_template(
-        "list.html",
-        items=[
-            [
-                i,
-                url_for("edit_register", register_id=i.id)
-            ] for i in items
-        ],
+        "list_registers.html",
+        items=items,
         add=url_for("edit_register"),
     )
 
@@ -64,7 +59,7 @@ def list_facilities():
     items = Facility.query.all()
 
     return render_template(
-        "list.html",
+        "list_facilities.html",
         items=[
             [
                 i,
@@ -120,18 +115,7 @@ def list_cases(register_id=None, fund_title=None, fund_register=None):
         app.logger.debug(q)
     cases = q.all()
 
-    items = [
-        (
-            "Все",
-            url_for(app.config.get("VIEW_CASE"), case_id=-1),
-        ),
-    ] + [
-        [
-            i,
-            url_for(app.config.get("VIEW_CASE"), case_id=i.id),
-            url_for("edit_case", case_id=i.id),
-        ] for i in cases
-    ]
+    items = cases
 
     app.logger.debug(items)
     return render_template(
