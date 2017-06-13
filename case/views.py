@@ -135,7 +135,7 @@ def list_cases(register_id=None, fund_title=None, fund_register=None):
 
     app.logger.debug(items)
     return render_template(
-        "list.html",
+        "list_cases.html",
         items=items,
         add=url_for("edit_case"),
     )
