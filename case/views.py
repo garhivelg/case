@@ -60,12 +60,7 @@ def list_facilities():
 
     return render_template(
         "list_facilities.html",
-        items=[
-            [
-                i,
-                url_for("edit_facility", facility_id=i.id)
-            ] for i in items
-        ],
+        items=items,
         add=url_for("edit_facility"),
     )
 
@@ -171,4 +166,4 @@ def edit_case(
         form.register.data = register
     app.logger.debug(form.errors)
 
-    return render_template("case.html", form=form, case=case)
+    return render_template("edit_case.html", form=form, case=case)
