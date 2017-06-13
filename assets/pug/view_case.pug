@@ -1,15 +1,6 @@
 extends _case.pug
 
 block content
-  #confirm-del(class="modal fade", tabindex=-1, role="dialog")
-    .modal-dialog
-      .modal-content
-        .modal-header Вы уверены?
-        .modal-body ...
-        .modal-footer
-          button(type="button", class="btn btn-default", data-dismiss="modal") Отменить
-          a(class="btn btn-default btn-danger btn-ok") Удалить
-
   div(class="panel panel-primary")
     .panel-heading
       h4.panel-title {{ case }}
