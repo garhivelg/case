@@ -1,4 +1,4 @@
-from flask import render_template, redirect, flash
+from flask import render_template, request, redirect, flash
 from flask.helpers import url_for
 
 
@@ -9,9 +9,18 @@ from .forms import CaseForm, RegisterForm, FacilityForm
 from .models import Register, Case, Facility
 
 
+def page():
+    page_str = request.args.get('page')
+    try:
+        page = int(page_str)
+    except (ValueError, TypeError):
+        page = 1
+    return page
+
+
 @app.route("/registers")
 def list_registers():
-    items = Register.query.all()
+    items = Register.query.paginate(page(), app.config.get('RECORDS_ON_PAGE'))
 
     return render_template(
         "list_registers.html",
@@ -50,7 +59,7 @@ def edit_register(register_id=None, fund_title=None, fund_register=None):
         "edit_register.html",
         form=form,
         register=register,
-        items=register.cases
+        items = Case.query.filter_by(register=register).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
     )
 
 
@@ -68,13 +77,13 @@ def view_register(register_id=None, fund_title=None, fund_register=None):
     return render_template(
         "list_cases.html",
         register=register,
-        items=register.cases
+        items = Case.query.filter_by(register=register).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
     )
 
 
 @app.route("/facilities")
 def list_facilities():
-    items = Facility.query.all()
+    items = Facility.query.paginate(page(), app.config.get('RECORDS_ON_PAGE'))
 
     return render_template(
         "list_facilities.html",
@@ -107,7 +116,7 @@ def edit_facility(facility_id=None):
         "edit_facility.html",
         form=form,
         facility=facility,
-        items=facility.cases
+        items = Case.query.filter_by(facility=facility).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
     )
 
 
@@ -118,7 +127,7 @@ def view_facility(facility_id=None):
     return render_template(
         "list_cases.html",
         facility=facility,
-        items=facility.cases
+        items = Case.query.filter_by(facility=facility).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
     )
 
 
@@ -137,9 +146,7 @@ def list_cases(register_id=None, fund_title=None, fund_register=None):
         app.logger.debug(q)
         q = q.filter(Case.register_id == register_id)
         app.logger.debug(q)
-    cases = q.all()
-
-    items = cases
+    items = q.paginate(page(), app.config.get('RECORDS_ON_PAGE'))
 
     app.logger.debug(items)
     return render_template(

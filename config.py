@@ -29,6 +29,8 @@ class Config(object):
 
     VIEW_CASE = "edit_case"
 
+    RECORDS_ON_PAGE = 50
+
 
 class ProductionConfig(Config):
     pass

@@ -16,7 +16,7 @@ block panel_master
       | {% if register.description %}
       | {{ register.description }}
       | {% else %}
-      | <strong>Дел:</strong> {{ items| length }}
+      | <strong>Дел:</strong> {{ items.total }}
       | {% endif %}
   | {% endif %}
   | {% if facility %}
@@ -32,7 +32,7 @@ block panel_master
       | {% if facility.description %}
       | {{ facility.description }}
       | {% else %}
-      | <strong>Дел:</strong> {{ items| length }}
+      | <strong>Дел:</strong> {{ items.total }}
       | {% endif %}
   | {% endif %}
 
@@ -86,8 +86,10 @@ block row_controls
           i(class="fa fa-eraser")
 
 block row_data
-  td {{ i.register }}  
-  td {{ i.book_num }}
+  td {{ i.book_num }}  
+  td {{ i.register }}
   td 
+    | {% if i.facility %}
     a(href="{{ url_for('view_facility', facility_id=i.facility.id) }}") {{ i.facility }}
+    | {% endif %}
 

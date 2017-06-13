@@ -55,14 +55,14 @@ block content
 
         .pull-right
           strong Количество: 
-          | {{ items | count }}
+          | {{ items.total }}
       | {% if items %}
       .table-responsive
         table(class="table table-bordered table-hover")
           block table_headers
 
           tbody
-            | {% for i in items %}
+            | {% for i in items.items %}
             tr
               block row_controls
 
