@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Исполком{% if title %} - {{title}}{% endif %}
+    </title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dropzone.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">{% block style %}{% endblock %}
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a class="navbar-brand" href="/">Исполком</a>
+          </div>
+          <div class="navbar-collapse collapse" id="navbar">
+            <ul class="nav navbar-nav">
+              <li><a href="{{ url_for('list_protocols') }}">Протоколы</a></li>
+              <li><a href="{{ url_for('list_decisions') }}">Решения</a></li>
+              <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Добавить <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ url_for('edit_protocol') }}">Протокол</a></li>
+                  <li><a href="{{ url_for('edit_decision') }}">Решение</a></li>
+                  <li><a href="{{ url_for('edit_case') }}">Дело</a></li>
+                  <li><a href="{{ url_for('edit_register') }}">Опись</a></li>
+                </ul>
+              </li>
+              <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Справочники <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ url_for('list_registers') }}">Описи</a></li>
+                  <li><a href="{{ url_for('list_cases') }}">Дела</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container">
+      {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+      <div class="alert alert-info">{{ message }}</div>  {% endfor %}
+      {% endwith %}
+      <div class="row">
+        <div class="modal fade" id="confirm-del" tabindex="-1" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">Вы уверены?</div>
+              <div class="modal-body">...</div>
+              <div class="modal-footer">
+                <button class="btn btn-default" type="button" data-dismiss="modal">Отменить</button><a class="btn btn-default btn-danger btn-ok">Удалить</a>
+              </div>
+            </div>
+          </div>
+        </div>{% if register %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h4 class="panel-title">{{ register }}</h4>
+          </div>
+          <div>
+            <div class="well well-sm">&nbsp;<a class="btn btn-sm btn-primary" href="{{ url_for('edit_register', register_id=register.id) }}" datat-toggle="tooltip" title="Редактировать"><i class="fa fa-edit"></i></a>
+              <div class="pull-right"><a href="{{ url_for('edit_case', case_id=protocol.case_id) }}">{{protocol.case}}</a></div>
+            </div>
+          </div>
+          <div class="panel-body">
+            {% if protocol.description %}
+            {{ protocol.description }}
+            {% else %}
+            <strong>Решений:</strong> {{ items| length }}
+            {% endif %}
+          </div>
+        </div>{% endif %}
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <h4 class="panel-title"> Дела
+            </h4>
+          </div>{% if add %}
+          <div class="panel-group" id="accordion1">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title"> <a class="acordion-toggle" href="#accordion1_href" data-toggle="collapse" data-parent="#accordion1">Поиск <span class="caret"></span></a></h4>
+              </div>
+              <div class="panel-collapse collapse" id="accordion1_href">
+                <div class="panel-body">
+                  <form class="form-search" id="filter_form" method="get">
+                    <div class="btn-group">
+                      <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Добавить Фильтр <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li><a href="#" name="protocol" class"filter btn>Протокол</a></li>
+                        <li><a href="#" name="record" class"filter btn>Опись</a></li>
+                        <li><a href="#" name="case" class"filter btn>Дело</a></li>
+                      </ul>
+                    </div>
+                    <table class="table table-responsive table-hover filters"></table>
+                    <button class="btn btn-sm btn-primary" type="submit"><span class="glyphicon glyphicon-plus"></span> Искать <i class="fa fa-search"></i></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>{% endif %}
+          <div>
+            <div class="well well-sm">{% if items.pages %}
+              <ul class="pagination pagination-sm">
+                <li class="{% if not items.has_prev %}disabled{% endif %}"><a href="?page={{ items.prev_num }}"><span class="glyphicon glyphicon-menu-left"></span></a></li>{%- for page in items.iter_pages() %}
+                {% if page %}
+                <li class="{% if page == items.page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>{% else %}
+                <li><span>…</span></li>{% endif %}
+                {%- endfor %}
+                <li class="{% if not items.has_next %}disabled{% endif %}"><a href="?page={{ items.next_num }}"><span class="glyphicon glyphicon-menu-right"></span></a></li>
+              </ul>{% endif %}
+              &nbsp;<a class="btn btn-sm btn-primary" href="{{ add }}" data-toggle="tooltip" title="Добавить"><i class="fa fa-plus"></i></a>
+              <div class="pull-right"><strong>Количество: </strong>{{ items | count }}</div>
+            </div>{% if items %}
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th class="col-md-1 col-lg1 col-sm-1"></th>
+                    <th>{%if order_id==1%}<a href="?order=1{% if not desc %}&amp;desc={{desc}}{% endif %}">
+                         Фонд<i class="fa fa-chevron-{% if desc %}up{% else %}down{% endif %} pull-right"></i></a>{%else%}<a href="?order=1">
+                         Фонд<i class="fa fa-arrows-v pull-right"></i></a>{%endif%}</th>
+                    <th>{%if order_id==2%}<a href="?order=2{% if not desc %}&amp;desc={{desc}}{% endif %}">
+                         Опись<i class="fa fa-chevron-{% if desc %}up{% else %}down{% endif %} pull-right"></i></a>{%else%}<a href="?order=2">
+                         Опись<i class="fa fa-arrows-v pull-right"></i></a>{%endif%}</th>
+                    <th>{%if order_id==3%}<a href="?order=3{% if not desc %}&amp;desc={{desc}}{% endif %}">
+                         Дел<i class="fa fa-chevron-{% if desc %}up{% else %}down{% endif %} pull-right"></i></a>{%else%}<a href="?order=3">
+                         Дел<i class="fa fa-arrows-v pull-right"></i></a>{%endif%}</th>
+                  </tr>
+                </thead>
+                <tbody>{% for i in items %}
+                  <tr>
+                    <td>
+                      <center>
+                        <div class="btn-group btn-group-xs"><a class="btn btn-sm btn-primary" href="{{ url_for('edit_register', case_id=i.id) }}" data-toggle="tooltip" title="Просмотреть"><i class="fa fa-search"></i></a><a class="btn btn-sm btn-primary" href="{{ url_for('edit_register', case_id=i.id) }}" data-toggle="tooltip" title="Редактировать"><i class="fa fa-edit"></i></a><a class="btn btn-sm btn-primary confirm" data-href="{{ url_for('edit_register', case_id=i.id) }}" data-toggle="modal" title="Удалить" data-text="Вы уверены, что хотите удалить эту запись?" data-target="#confirm-del"><i class="fa fa-eraser"></i></a></div>
+                      </center>
+                    </td>
+                    <td>{{ i.fund }}  </td>
+                    <td>{{ i.register }}  </td>
+                    <td>{{ i }}  </td>
+                  </tr>{% endfor %}
+                </tbody>
+              </table>
+            </div>{% else %}
+            <h3>Список пуст</h3>{% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script language="javascript">
+      $('#confirm-del').on('show.bs.modal', function(e) {
+        $(this).find('.modal-body').html($(e.relatedTarget).data('text'));
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+      });
+    </script>{% block script %}{% endblock %}
+  </body>
+</html>

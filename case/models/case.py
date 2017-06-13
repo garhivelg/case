@@ -22,8 +22,8 @@ class Case(db.Model):
     facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
     description = db.Column(db.UnicodeText, info={'label': "Примечания"})
 
-    register = db.relationship("Register")
-    facility = db.relationship("Facility")
+    register = db.relationship("Register", backref="cases")
+    # facility = db.relationship("Facility")
 
     def title(self, format="%s д. %d"):
         if self.book_num is None:
