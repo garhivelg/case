@@ -1,4 +1,5 @@
 from app import db
+import random
 
 
 class Register(db.Model):
@@ -12,6 +13,14 @@ class Register(db.Model):
 
     def __repr__(self):
         return self.title()
+
+    def randomize(self, fake):
+        letter = chr(random.randint(ord('а'), ord('я')))
+        self.fund = "%s-%d" % (letter, fake.pyint())
+        self.register = fake.pyint()
+        chance = random.randint(0, 100)
+        if chance < 25:
+            self.description = "\n".join(fake.paragraphs())
 
 
 class Case(db.Model):
@@ -36,3 +45,11 @@ class Case(db.Model):
 
     def __repr__(self):
         return self.title()
+
+    def randomize(self, fake):
+        # book_id
+        self.book_num = fake.pyint()
+        # facility_id
+        chance = random.randint(0, 100)
+        if chance < 25:
+            self.description = "\n".join(fake.paragraphs())

@@ -1,4 +1,5 @@
 from app import db
+import random
 
 
 class Facility(db.Model):
@@ -10,3 +11,9 @@ class Facility(db.Model):
 
     def __repr__(self):
         return self.title
+
+    def randomize(self, fake):
+        self.title = fake.company()
+        chance = random.randint(0, 100)
+        if chance < 25:
+            self.description = "\n".join(fake.paragraphs())

@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_script import Manager
 
 
 import os
@@ -34,6 +35,8 @@ def create_app(debug=False, config='config.ProductionConfig'):
 
 debug = os.environ.get('FLASK_DEBUG', False)
 app, db = create_app(debug=debug)
+manager = Manager(app)
 
 
+from case import commands
 from case import views
