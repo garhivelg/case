@@ -1,6 +1,15 @@
 extends _case.pug
 
 block content
+  #confirm-del(class="modal fade", tabindex=-1, role="dialog")
+    .modal-dialog
+      .modal-content
+        .modal-header Вы уверены?
+        .modal-body ...
+        .modal-footer
+          button(type="button", class="btn btn-default", data-dismiss="modal") Отменить
+          a(class="btn btn-default btn-danger btn-ok") Удалить
+
   div(class="panel panel-primary")
     .panel-heading
       h4.panel-title {{ case }}
@@ -10,8 +19,8 @@ block content
         a(href="{{ url_for('edit_case', case_id=case.id) }}", class="btn btn-sm btn-primary", datat-toggle="tooltip", title="Редактировать")
           i(class="fa fa-edit")
         | &nbsp;
-        a(href="{{ url_for('edit_case', case_id=case.id) }}", class="btn btn-sm btn-primary", datat-toggle="tooltip", title="Редактировать")
-          i(class="fa fa-del")
+        a(data-href="{{ url_for('edit_case', case_id=case.id) }}", class="btn btn-sm btn-primary confirm" data-toggle="modal", title="Удалить", data-text="Вы уверены, что хотите удалить эту запись?", data-target="#confirm-del")
+          i(class="fa fa-eraser")
         
     .panel-body
       p <strong>Опись:</strong> {{ case.register }}
