@@ -50,7 +50,25 @@ def edit_register(register_id=None, fund_title=None, fund_register=None):
         "edit_register.html",
         form=form,
         register=register,
-        items=Case.query.filter(Case.register == register)
+        items=register.cases
+    )
+
+
+@app.route("/register/<int:register_id>")
+@app.route("/register/<string:fund_title>/<int:fund_register>")
+def view_register(register_id=None, fund_title=None, fund_register=None):
+    if fund_title is not None:
+        register = Register.query \
+            .filter(Register.fund == fund_title) \
+            .filter(Register.register == fund_register) \
+            .first_or_404()
+    else:
+        register = Register.query.get_or_404(register_id)
+
+    return render_template(
+        "list_cases.html",
+        register=register,
+        items=register.cases
     )
 
 
@@ -89,7 +107,18 @@ def edit_facility(facility_id=None):
         "edit_facility.html",
         form=form,
         facility=facility,
-        items=Case.query.filter(Case.facility == facility)
+        items=facility.cases
+    )
+
+
+@app.route("/facility/<int:facility_id>")
+def view_facility(facility_id=None):
+    facility = Facility.query.get_or_404(facility_id)
+
+    return render_template(
+        "list_cases.html",
+        facility=facility,
+        items=facility.cases
     )
 
 
@@ -167,3 +196,24 @@ def edit_case(
     app.logger.debug(form.errors)
 
     return render_template("edit_case.html", form=form, case=case)
+
+
+@app.route("/case/<int:case_id>")
+@app.route("/case/<string:fund_title>/<int:fund_register>/<int:case_num>")
+def view_case(case_id=None, fund_title=None, fund_register=None, case_num=None):
+    if fund_title is not None:
+        register = Register.query \
+            .filter(Register.fund == fund_title) \
+            .filter(Register.register == fund_register) \
+            .first_or_404()
+        case = Case.query \
+            .filter(Case.register_id == register.id) \
+            .filter(Case.case_num == case_num) \
+            .first_or_404()
+    else:
+        case = Case.query.get_or_404(case_id)
+
+    return render_template(
+        "view_case.html",
+        case=case,
+    )
