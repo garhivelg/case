@@ -35,9 +35,9 @@ html
               button(type="button", class="btn btn-default", data-dismiss="modal") Отменить
               a(class="btn btn-default btn-danger btn-ok") Удалить
 
-      | {% with messages = get_flashed_messages() %}
-      |   {% for message in messages %}
-      div(class="alert alert-info")
+      | {% with messages = get_flashed_messages(with_categories=True) %}
+      |   {% for category, message in messages %}
+      div(class="alert alert-{{category}}")
         | {{ message }}
       |   {% endfor %}
       | {% endwith %}

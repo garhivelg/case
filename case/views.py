@@ -48,9 +48,9 @@ def edit_register(register_id=None, fund_title=None, fund_register=None):
         form.populate_obj(register)
         db.session.add(register)
         if register.id:
-            flash("Опись изменена")
+            flash("Опись изменена", 'success')
         else:
-            flash("Опись добавлена")
+            flash("Опись добавлена", 'success')
         db.session.commit()
         return redirect(url_for("list_registers"))
 
@@ -81,6 +81,15 @@ def view_register(register_id=None, fund_title=None, fund_register=None):
     )
 
 
+@app.route("/register/del/<int:register_id>")
+def del_register(register_id=None):
+    register = Register.query.get_or_404(register_id)
+    db.session.delete(register)
+    db.session.commit()
+    flash("Опись удалена", 'danger')
+    return redirect(url_for("list_registers"))
+
+
 @app.route("/facilities")
 def list_facilities():
     items = Facility.query.paginate(page(), app.config.get('RECORDS_ON_PAGE'))
@@ -105,9 +114,9 @@ def edit_facility(facility_id=None):
         form.populate_obj(facility)
         db.session.add(facility)
         if facility.id:
-            flash("Предприятие изменено")
+            flash("Предприятие изменено", 'success')
         else:
-            flash("Предприятие добавлено")
+            flash("Предприятие добавлено", 'success')
         db.session.commit()
         return redirect(url_for("list_facilities"))
 
@@ -129,6 +138,15 @@ def view_facility(facility_id=None):
         facility=facility,
         items = Case.query.filter_by(facility=facility).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
     )
+
+
+@app.route("/facility/del/<int:facility_id>")
+def del_facility(facility_id=None):
+    facility = Facility.query.get_or_404(facility_id)
+    db.session.delete(facility)
+    db.session.commit()
+    flash("Предприятие удалено", 'danger')
+    return redirect(url_for("list_facilities"))
 
 
 @app.route("/register/<int:register_id>/cases")
@@ -191,9 +209,9 @@ def edit_case(
             case.facility_id = form.facility.data.id
         db.session.add(case)
         if case.id:
-            flash("Опись изменена")
+            flash("Опись изменена", 'success')
         else:
-            flash("Опись добавлена")
+            flash("Опись добавлена", 'success')
         db.session.commit()
         return redirect(url_for("list_cases"))
 
@@ -224,3 +242,12 @@ def view_case(case_id=None, fund_title=None, fund_register=None, case_num=None):
         "view_case.html",
         case=case,
     )
+
+
+@app.route("/case/del/<int:case_id>")
+def del_case(case_id=None):
+    case = Case.query.get_or_404(case_id)
+    db.session.delete(case)
+    db.session.commit()
+    flash("Дело удалено", 'danger')
+    return redirect(url_for("list_cases"))

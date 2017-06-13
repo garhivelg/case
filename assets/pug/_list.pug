@@ -33,7 +33,7 @@ block content
     div
       div(class="well well-sm")
         | {% if items.pages %}
-        ul(class="pagination pagination-sm")
+        ul(class="pagination pagination-sm", style="display:inherit;")
           li(class="{% if not items.has_prev %}disabled{% endif %}")
             a(href="?page={{ items.prev_num }}")
               span(class="glyphicon glyphicon-menu-left")
