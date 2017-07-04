@@ -23,7 +23,7 @@ def list_registers():
     items = Register.query.paginate(page(), app.config.get('RECORDS_ON_PAGE'))
 
     return render_template(
-        "list_registers.html",
+        "cases/list_registers.html",
         items=items,
         add=url_for("edit_register"),
     )
@@ -56,7 +56,7 @@ def edit_register(register_id=None, fund_title=None, fund_register=None):
 
     app.logger.debug(form.errors)
     return render_template(
-        "edit_register.html",
+        "cases/edit_register.html",
         form=form,
         register=register,
         items = Case.query.filter_by(register=register).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
@@ -75,7 +75,7 @@ def view_register(register_id=None, fund_title=None, fund_register=None):
         register = Register.query.get_or_404(register_id)
 
     return render_template(
-        "list_cases.html",
+        "cases/list_cases.html",
         register=register,
         items = Case.query.filter_by(register=register).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
     )
@@ -95,7 +95,7 @@ def list_facilities():
     items = Facility.query.paginate(page(), app.config.get('RECORDS_ON_PAGE'))
 
     return render_template(
-        "list_facilities.html",
+        "cases/list_facilities.html",
         items=items,
         add=url_for("edit_facility"),
     )
@@ -122,7 +122,7 @@ def edit_facility(facility_id=None):
 
     app.logger.debug(form.errors)
     return render_template(
-        "edit_facility.html",
+        "cases/edit_facility.html",
         form=form,
         facility=facility,
         items = Case.query.filter_by(facility=facility).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
@@ -134,7 +134,7 @@ def view_facility(facility_id=None):
     facility = Facility.query.get_or_404(facility_id)
 
     return render_template(
-        "list_cases.html",
+        "cases/list_cases.html",
         facility=facility,
         items = Case.query.filter_by(facility=facility).paginate(page(), app.config.get('RECORDS_ON_PAGE'))
     )
@@ -168,7 +168,7 @@ def list_cases(register_id=None, fund_title=None, fund_register=None):
 
     app.logger.debug(items)
     return render_template(
-        "list_cases.html",
+        "cases/list_cases.html",
         items=items,
         add=url_for("edit_case"),
     )
@@ -220,7 +220,7 @@ def edit_case(
         form.register.data = register
     app.logger.debug(form.errors)
 
-    return render_template("edit_case.html", form=form, case=case)
+    return render_template("cases/edit_case.html", form=form, case=case)
 
 
 @app.route("/case/<int:case_id>")
@@ -239,7 +239,7 @@ def view_case(case_id=None, fund_title=None, fund_register=None, case_num=None):
         case = Case.query.get_or_404(case_id)
 
     return render_template(
-        "view_case.html",
+        "cases/view_case.html",
         case=case,
     )
 
