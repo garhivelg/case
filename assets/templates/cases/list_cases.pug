@@ -1,15 +1,9 @@
 extends ../_list.pug
 
 block panel_master
+  include ../_panel.pug
   | {% if register %}
-  div(class="panel panel-primary")
-    .panel-heading
-      h4.panel-title {{ register }}
-    div
-      div(class="well well-sm")
-        | &nbsp;
-        a(href="{{ url_for('edit_register', register_id=register.id) }}", class="btn btn-sm btn-primary", datat-toggle="tooltip", title="Редактировать")
-          i(class="fa fa-edit")
+  +panel("{{ register }}", "{{ url_for('edit_register', register_id=register.id) }}", false, false)
     .panel-body
       p <strong>Фонд:</strong> {{ register.fund }} 
       p <strong>Опись:</strong> {{ register.register }}
@@ -20,14 +14,7 @@ block panel_master
       | {% endif %}
   | {% endif %}
   | {% if facility %}
-  div(class="panel panel-primary")
-    .panel-heading
-      h4.panel-title {{ facility }}
-    div
-      div(class="well well-sm")
-        | &nbsp;
-        a(href="{{ url_for('edit_facility', facility_id=facility.id) }}", class="btn btn-sm btn-primary", datat-toggle="tooltip", title="Редактировать")
-          i(class="fa fa-edit")
+  +panel("{{ facility }}", "{{ url_for('edit_register', facility_id=facility.id) }}", false, false)
     .panel-body
       | {% if facility.description %}
       | {{ facility.description }}
@@ -36,14 +23,12 @@ block panel_master
       | {% endif %}
   | {% endif %}
 
-block panel_head
-  | Дела
-
 block table_headers
+  // | Дела
   thead
     tr
       th(class="col-md-1 col-lg1 col-sm-1")
-      th
+      th(style="width: 100px;")
         | {%if order_id==1%}
         a(href="?order=1{% if not desc %}&desc={{desc}}{% endif %}") 
           | Дело №
@@ -53,7 +38,7 @@ block table_headers
           | Дело №
           i(class="fa fa-arrows-v pull-right")
         | {%endif%}
-      th
+      th(style="width: 150px;")
         | {%if order_id==2%}
         a(href="?order=2{% if not desc %}&desc={{desc}}{% endif %}") 
           | Опись
