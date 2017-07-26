@@ -53,3 +53,11 @@ class Case(db.Model):
         chance = random.randint(0, 100)
         if chance < 25:
             self.description = "\n".join(fake.paragraphs())
+
+    def normalize(self):
+        if not self.book_id:
+            self.book_id = self.book_num
+            return
+
+        res = int(''.join(c for c in self.book_id if c.isdigit()))
+        self.book_num = res

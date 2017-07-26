@@ -207,6 +207,7 @@ def edit_case(
             case.register_id = form.register.data.id
         if form.facility.data:
             case.facility_id = form.facility.data.id
+        case.normalize()
         db.session.add(case)
         if case.id:
             flash("Опись изменена", 'success')
@@ -215,6 +216,7 @@ def edit_case(
         db.session.commit()
         return redirect(url_for("list_cases"))
 
+    case.normalize()
     if register_id:
         register = Register.query.get(register_id)
         form.register.data = register
