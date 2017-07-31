@@ -59,5 +59,5 @@ class Case(db.Model):
             self.book_id = self.book_num
             return
 
-        res = int(''.join(c for c in self.book_id if c.isdigit()))
+        res = int(''.join(c for c in str(self.book_id) if c.isdigit()))
         self.book_num = res
