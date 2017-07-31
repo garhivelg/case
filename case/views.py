@@ -195,8 +195,10 @@ def edit_case(
             .filter(Case.register_id == register.id) \
             .filter(Case.case_num == case_num) \
             .first_or_404()
+        case.normalize()
     elif case_id is not None:
         case = Case.query.get_or_404(case_id)
+        case.normalize()
     else:
         case = Case()
     form = CaseForm(obj=case)
