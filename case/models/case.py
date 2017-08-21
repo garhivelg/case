@@ -22,6 +22,11 @@ class Register(db.Model):
         if chance < 25:
             self.description = "\n".join(fake.paragraphs())
 
+    def import_yml(self, data=dict()):
+        self.fund = data.get('fund')
+        self.register = data.get('register')
+        self.description = data.get('description')
+
 
 class Case(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -61,3 +66,8 @@ class Case(db.Model):
 
         res = int(''.join(c for c in self.book_id if c.isdigit()))
         self.book_num = res
+
+    def import_yml(self, data=dict()):
+        self.book_id = data.get('book')
+        self.facility_id = data.get('facility')
+        self.description = data.get('description')
