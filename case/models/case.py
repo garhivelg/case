@@ -63,7 +63,7 @@ class Case(db.Model):
                 return self.book_num
             else:
                 return ""
-        return self.book_id           
+        return self.book_id
 
     def normalize(self):
         if not self.book_id:
