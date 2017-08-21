@@ -39,11 +39,8 @@ class Case(db.Model):
     register = db.relationship("Register", backref="cases")
     # facility = db.relationship("Facility")
 
-    def title(self, format="%s д. %d"):
-        if self.book_num is None:
-            book_num = 1
-        else:
-            book_num = self.book_num
+    def title(self, format="%s д. %s"):
+        book_num = self.case_id_txt
         if self.register:
             return format % (self.register, book_num)
         return format % ('', book_num)
@@ -59,12 +56,21 @@ class Case(db.Model):
         if chance < 25:
             self.description = "\n".join(fake.paragraphs())
 
+    @property
+    def case_id_txt(self):
+        if not self.book_id:
+            if self.book_num:
+                return self.book_num
+            else:
+                return ""
+        return self.book_id           
+
     def normalize(self):
         if not self.book_id:
             self.book_id = self.book_num
             return
 
-        res = int(''.join(c for c in self.book_id if c.isdigit()))
+        res = int(''.join(c for c in str(self.book_id) if c.isdigit()))
         self.book_num = res
 
     def import_yml(self, data=dict()):
