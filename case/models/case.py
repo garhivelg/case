@@ -64,6 +64,7 @@ class Case(db.Model):
         if not self.book_id:
             self.book_id = self.book_num
             return
+        
         try:
             res = int(''.join(c for c in str(self.book_id) if c.isdigit()))
         except ValueError:
