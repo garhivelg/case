@@ -22,6 +22,11 @@ class Register(db.Model):
         if chance < 25:
             self.description = "\n".join(fake.paragraphs())
 
+    def import_yml(self, data=dict()):
+        self.fund = data.get('fund')
+        self.register = data.get('register')
+        self.description = data.get('description')
+
 
 class Case(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,7 +63,7 @@ class Case(db.Model):
                 return self.book_num
             else:
                 return ""
-        return self.book_id           
+        return self.book_id
 
     def normalize(self):
         if not self.book_id:
@@ -70,3 +75,8 @@ class Case(db.Model):
         except ValueError:
             res = 0
         self.book_num = res
+
+    def import_yml(self, data=dict()):
+        self.book_id = data.get('book')
+        self.facility_id = data.get('facility')
+        self.description = data.get('description')
